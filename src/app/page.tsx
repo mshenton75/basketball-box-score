@@ -13,7 +13,7 @@ export default function Home() {
 
 
 function Button() {
-  const [numClicks, setNumClicks] = useState<number | undefined>(undefined);
+  const [numClicks, setNumClicks] = useState<number | undefined >(undefined);
 
   return (
     <button 
