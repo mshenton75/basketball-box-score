@@ -1,8 +1,6 @@
-import { useState } from "react";
-import { BoxScore } from "./BoxScore";
+import { BoxScore, Team } from "./BoxScore";
 
-export function GameList() {
-  // TODO: NBA-16: Use real game data
+export function gameList() {
   const games = [
     new Game("Celtics", "Knicks"),
     new Game("Nuggets", "Lakers"),
@@ -21,11 +19,55 @@ export function GameList() {
 }
 
 class Game {
-  homeTeam: string;
-  awayTeam: string;
+  homeTeam: Team;
+  awayTeam: Team;
 
   constructor(homeTeam: string, awayTeam: string) {
-    this.homeTeam = homeTeam;
-    this.awayTeam = awayTeam;
+    this.homeTeam = {
+      name: homeTeam,
+      // TODO: NBA-16: Use real game data
+      stats: [
+        {
+          name: "LeBron James",
+          position: "SF",
+          points: 25,
+          rebounds: 11, 
+          assists: 5
+        },
+        {
+          name: "Anthony Davids",
+          position: "C",
+          points: 33,
+          rebounds: 14, 
+          assists: 2
+        },
+        {
+          name: "Austin Reeves",
+          position: "SG",
+          points: 13,
+          rebounds: 6, 
+          assists: 3
+        }
+      ]
+    }
+    this.awayTeam = {
+      name: awayTeam,
+      stats:  [
+        {
+          name: "Kevin Durant",
+          position: "SF",
+          points: 22,
+          rebounds: 7, 
+          assists: 3
+        },
+        {
+          name: "Devin Booker",
+          position: "SG",
+          points: 27,
+          rebounds: 4, 
+          assists: 9
+        }
+      ]
+    }
   }
 }
