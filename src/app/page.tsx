@@ -13,17 +13,3 @@ export default function Home() {
     </div>
   );
 }
-
-
-// function Button() {
-// //   const [numClicks, setNumClicks] = useState<number | undefined >(undefined);
-
-// //   return (
-// //     <button 
-// //       className="rounded bg-black text-white p-4"
-// //       onClick={() => setNumClicks(numClicks === undefined ? 0 : numClicks + 1)}
-// //     >
-// //       Clicked {numClicks}
-// //     </button>
-// //   )
-// // }
