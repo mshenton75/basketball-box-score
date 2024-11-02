@@ -1,9 +1,7 @@
 import { useState } from "react";
-import { v4 as uuid } from 'uuid';
-import Card from 'react-bootstrap/Card';
+import { BoxScore } from "./BoxScore";
 
 export function GameList() {
-  const [numClicks, setNumClicks] = useState<number | undefined >(undefined);
   // TODO: NBA-16: Use real game data
   const games = [
     new Game("Celtics", "Knicks"),
@@ -13,13 +11,9 @@ export function GameList() {
 
   return ( 
     <ul>
-      {games.map((game) => (
-        <li key={game.uid}> 
-          <Card bg="light" className="my-4">
-            <Card.Body>
-              <Card.Text>{game.awayTeam} at {game.homeTeam}</Card.Text>
-            </Card.Body>
-          </Card>
+      {games.map((game, idx) => (
+        <li key={idx}> 
+          <BoxScore awayTeam={game.awayTeam} homeTeam={game.homeTeam}></BoxScore>
         </li>
       ))}
     </ul>
@@ -29,11 +23,9 @@ export function GameList() {
 class Game {
   homeTeam: string;
   awayTeam: string;
-  uid: string;
 
   constructor(homeTeam: string, awayTeam: string) {
     this.homeTeam = homeTeam;
     this.awayTeam = awayTeam;
-    this.uid = uuid();
   }
 }
