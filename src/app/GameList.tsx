@@ -35,7 +35,7 @@ class Game {
           assists: 5
         },
         {
-          name: "Anthony Davids",
+          name: "Anthony Davis",
           position: "C",
           points: 33,
           rebounds: 14, 

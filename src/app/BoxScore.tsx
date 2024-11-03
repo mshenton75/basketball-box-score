@@ -2,6 +2,7 @@ import { useState } from "react";
 import Card from 'react-bootstrap/Card';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
+import Dropdown from 'react-bootstrap/Dropdown';
 
 export type Team = {
   name: string,
@@ -19,26 +20,60 @@ type PlayerStats = {
 type Position = "PG" | "SG" | "SF" | "PF" | "C"
 
 export function BoxScore({ awayTeam, homeTeam }:  { awayTeam: Team; homeTeam: Team }) {
-
   const [isExpanded, toggleExpanded] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState<Team>(homeTeam)
+  const [activeFilterPosition, setActiveFilterPosition] = useState<Position | null>(null)
 
   const teamButton = function (team: Team) {
     const variant = team == selectedTeam ? "primary" : "outline-primary"
-    return <Button className="mx-2" variant={variant} onClick={() => setSelectedTeam(team)}>{team.name}</Button>;  
+    return <Button variant={variant} onClick={() => setSelectedTeam(team)}>{team.name}</Button>;  
   }
+
+  const filterPositions = function () {
+    let positions: Position[];
+    positions = ["PG", "SG", "SF", "PF", "C"]
+  
+    return (
+      <Dropdown>
+        <Dropdown.Toggle variant="dark">
+          Filter positions
+        </Dropdown.Toggle>
+  
+        <Dropdown.Menu>
+          {positions.map((position) => (
+            <Dropdown.Item key={position} onClick={() => setActiveFilterPosition(position)}>
+              {position}
+            </Dropdown.Item>
+          ))}
+        </Dropdown.Menu>
+      </Dropdown>
+    );
+  }
+
+  const stats = selectedTeam.stats.filter((player) => 
+    !activeFilterPosition || player.position == activeFilterPosition
+  )
 
   return ( 
     <Card bg="light" className="my-4 cursor-pointer">
-      <Card.Header className="cursor-pointer" onClick={() => toggleExpanded(!isExpanded)}>{awayTeam.name} at {homeTeam.name}</Card.Header>
+      <Card.Header className="cursor-pointer" onClick={() => toggleExpanded(!isExpanded)}>
+        <h4>{awayTeam.name} at {homeTeam.name}</h4>
+      </Card.Header>
       {isExpanded &&
           <Card.Body>
             <div>
-              <div className="d-flex my-2">
-                {teamButton(homeTeam)}
-                {teamButton(awayTeam)}
+              <div className="row my-2">
+                <div className="col-auto">
+                  {teamButton(homeTeam)}
+                </div>
+                <div className="col-auto">
+                  {teamButton(awayTeam)}
+                </div>
+                <div className="col text-right">
+                  {filterPositions()}
+                </div>
               </div>
-              {boxScore(selectedTeam.stats)}
+              {boxScore(stats)}
             </div>
         </Card.Body>
       }
@@ -61,6 +96,7 @@ function boxScore(stats: PlayerStats[]) {
       </thead>
       <tbody>
         {stats.map((playerStats) => (
+          // TODO: Filter out non-active positions
           <tr key={playerStats.name}>
             <td>{playerStats.name}</td>
             <td>{playerStats.position}</td>
@@ -73,3 +109,6 @@ function boxScore(stats: PlayerStats[]) {
     </Table>
   )
 }
+
+
+
