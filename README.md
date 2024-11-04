@@ -1,0 +1,2 @@
+# 🏀 Basketball box score #
+Toy basketball box score project built with React (TypeScript) and Django (Python). See `frontend/README.md` and `backend/README.md` for instructions to build the respective projects.
