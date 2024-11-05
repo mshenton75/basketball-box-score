@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getGame } from "./api";
 import Card from 'react-bootstrap/Card';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
@@ -6,14 +7,20 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 
-export type Team = {
-  name: string,
-  stats: PlayerStats[]
+export type Game = { 
+  homeTeam: Team 
+  awayTeam: Team
+  id: string
 }
 
-type PlayerStats = {
+export type Team = {
   name: string,
-  position: Position,
+  id: string
+}
+
+export type PlayerStats = {
+  name: string,
+  position: Position | null,
   points: number,
   rebounds: number, 
   assists: number,
@@ -21,13 +28,21 @@ type PlayerStats = {
 
 type Position = "PG" | "SG" | "SF" | "PF" | "C"
 
-export function BoxScore({ awayTeam, homeTeam }:  { awayTeam: Team; homeTeam: Team }) {
+export function BoxScore({ homeTeam, awayTeam, id }:  Game) {
   const [isExpanded, toggleExpanded] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState<Team>(homeTeam)
   const [activeFilterPosition, setActiveFilterPosition] = useState<Position | null>(null)
+  const [stats, setStats] = useState<{ homeTeam: PlayerStats[], awayTeam: PlayerStats[] } | undefined>(undefined)
+  
+  useEffect(() => {
+      getGame(id)
+      .then(response => {
+        setStats(response);
+      })
+  }, []);
 
   const teamButton = function (team: Team) {
-    const variant = team == selectedTeam ? "primary" : "outline-primary"
+    const variant = team.id == selectedTeam.id ? "primary" : "outline-primary"
     return <Button variant={variant} onClick={() => setSelectedTeam(team)}>{team.name}</Button>;  
   }
 
@@ -52,9 +67,7 @@ export function BoxScore({ awayTeam, homeTeam }:  { awayTeam: Team; homeTeam: Te
     );
   }
 
-  const stats = selectedTeam.stats.filter((player) => 
-    !activeFilterPosition || player.position == activeFilterPosition
-  )
+  const activeStats = stats && (selectedTeam.id == homeTeam.id ? stats.homeTeam : stats.awayTeam)
 
   return ( 
     <Card bg="light" className="my-4 cursor-pointer">
@@ -75,7 +88,7 @@ export function BoxScore({ awayTeam, homeTeam }:  { awayTeam: Team; homeTeam: Te
               <div className="text-left my-2">
                 {filterPositions()}
               </div>
-              {boxScore(stats)}
+              {activeStats && boxScore(activeStats)}
             </div>
         </Card.Body>
       }
@@ -109,6 +122,3 @@ function boxScore(stats: PlayerStats[]) {
     </Table>
   )
 }
-
-
-

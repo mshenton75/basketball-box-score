@@ -1,13 +1,6 @@
-import { BoxScore, Team } from "./BoxScore";
+import { BoxScore, Game} from "./BoxScore";
 import { getGames } from "./api";
 import { useState, useEffect } from "react";
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
-
-export type Game = { 
-  homeTeam: Team 
-  awayTeam: Team
-}
 
 export function Games() {
   const [games, setGames] = useState<Game[]>([])
@@ -24,7 +17,7 @@ export function Games() {
     <ul>
       {games.map((game, idx) => (
         <li key={idx}> 
-          <BoxScore awayTeam={game.awayTeam} homeTeam={game.homeTeam}></BoxScore>
+          <BoxScore {...game}></BoxScore>
         </li>
       ))}
     </ul>

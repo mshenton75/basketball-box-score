@@ -1,65 +1,63 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
-from nba_api.live.nba.endpoints import scoreboard
+from typing import Optional
+from nba_api.live.nba.endpoints import scoreboard, boxscore
 
 router = APIRouter(
     prefix="/api",
     tags=["api"],
 )
 
-class Stats(BaseModel):
-  name: str 
-  position: str
-  points: int 
-  rebounds: int 
-  assists: int
-
 class Team(BaseModel):
   name: str
-  stats: list[Stats]
+  id: str
 
 class Game(BaseModel):
   homeTeam: Team
   awayTeam: Team
+  id: str
 
 @router.get("/games")
 def games() -> list[Game]:
   def serialize_game(game): 
-    home_team = {
+    home_team = { 
       "name": f"{game['homeTeam']['teamCity']} {game['homeTeam']['teamName']}",
-      "stats": fake_stats() # TODO: NBA-25: Use real player stats
+      "id": str(game["homeTeam"]["teamId"])
     }
-    away_team = {
+    away_team = { 
       "name": f"{game['awayTeam']['teamCity']} {game['awayTeam']['teamName']}",
-      "stats": fake_stats() # TODO: NBA-25: Use real player stats
+      "id": str(game["awayTeam"]["teamId"])
     }
-    return Game(homeTeam=home_team, awayTeam=away_team)
+    return Game(homeTeam=home_team, awayTeam=away_team, id=str(game['gameId']))
 
   games = scoreboard.ScoreBoard().get_dict()['scoreboard']['games']
   return map(serialize_game, games)
 
 
-def fake_stats():
-  return [
-    {
-        "name": "Player A",
-        "position": "SF",
-        "points": 0,
-        "rebounds": 0,
-        "assists": 0
-    },
-    {
-        "name": "Player B",
-        "position": "C",
-        "points": 0,
-        "rebounds": 0,
-        "assists": 0
-    },
-    {
-        "name": "Player C",
-        "position": "SG",
-        "points": 0,
-        "rebounds": 0,
-        "assists": 0
-    }
-]
+class Stats(BaseModel):
+  name: str 
+  position: Optional[str] = None
+  points: int 
+  rebounds: int 
+  assists: int
+
+class GameStats(BaseModel):
+  homeTeam: list[Stats]
+  awayTeam: list[Stats]
+
+@router.get("/game/{game_id}")
+def game(game_id) -> GameStats:
+  def serialize_player(player):
+    return Stats(
+      name=player["name"],
+      position=player.get("position"),
+      points=player["statistics"]["points"],
+      rebounds=player["statistics"]["reboundsTotal"],
+      assists=player["statistics"]["assists"]
+    )
+
+  box_score = boxscore.BoxScore(game_id).get_dict()["game"]
+  return GameStats(
+    homeTeam=map(serialize_player, box_score["homeTeam"]["players"]),
+    awayTeam=map(serialize_player, box_score["awayTeam"]["players"])
+  )
