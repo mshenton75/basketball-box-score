@@ -3,6 +3,8 @@ import Card from 'react-bootstrap/Card';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
 
 export type Team = {
   name: string,
@@ -62,14 +64,14 @@ export function BoxScore({ awayTeam, homeTeam }:  { awayTeam: Team; homeTeam: Te
       {isExpanded &&
           <Card.Body>
             <div>
-              <div className="row my-2">
-                <div className="col-auto">
+              <Row className="my-2">
+                <Col>
                   {teamButton(homeTeam)}
-                </div>
-                <div className="col-auto">
+                </Col>
+                <Col>
                   {teamButton(awayTeam)}
-                </div>
-              </div>
+                </Col>
+              </Row>
               <div className="text-left my-2">
                 {filterPositions()}
               </div>
