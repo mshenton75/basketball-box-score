@@ -45,28 +45,6 @@ export function BoxScore({ homeTeam, awayTeam, id }:  Game) {
     const variant = team.id == selectedTeam.id ? "primary" : "outline-primary"
     return <Button variant={variant} onClick={() => setSelectedTeam(team)}>{team.name}</Button>;  
   }
-
-  const filterPositions = function () {
-    let positions: Position[];
-    positions = ["PG", "SG", "SF", "PF", "C"]
-  
-    return (
-      <Dropdown>
-        <Dropdown.Toggle variant="dark">
-          Filter positions
-        </Dropdown.Toggle>
-  
-        <Dropdown.Menu>
-          {positions.map((position) => (
-            <Dropdown.Item key={position} onClick={() => setActiveFilterPosition(position)}>
-              {position}
-            </Dropdown.Item>
-          ))}
-        </Dropdown.Menu>
-      </Dropdown>
-    );
-  }
-
   const activeStats = stats && (selectedTeam.id == homeTeam.id ? stats.homeTeam : stats.awayTeam)
 
   return ( 
@@ -85,9 +63,6 @@ export function BoxScore({ homeTeam, awayTeam, id }:  Game) {
                   {teamButton(awayTeam)}
                 </Col>
               </Row>
-              <div className="text-left my-2">
-                {filterPositions()}
-              </div>
               {activeStats && boxScore(activeStats)}
             </div>
         </Card.Body>
