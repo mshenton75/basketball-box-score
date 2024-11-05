@@ -69,9 +69,9 @@ export function BoxScore({ awayTeam, homeTeam }:  { awayTeam: Team; homeTeam: Te
                 <div className="col-auto">
                   {teamButton(awayTeam)}
                 </div>
-                <div className="col text-right">
-                  {filterPositions()}
-                </div>
+              </div>
+              <div className="text-left my-2">
+                {filterPositions()}
               </div>
               {boxScore(stats)}
             </div>
@@ -81,7 +81,6 @@ export function BoxScore({ awayTeam, homeTeam }:  { awayTeam: Team; homeTeam: Te
   )
 }
 
-// TODO: NBA-16: Use real game data
 function boxScore(stats: PlayerStats[]) {
   return ( 
     <Table striped bordered hover>
@@ -96,7 +95,6 @@ function boxScore(stats: PlayerStats[]) {
       </thead>
       <tbody>
         {stats.map((playerStats) => (
-          // TODO: Filter out non-active positions
           <tr key={playerStats.name}>
             <td>{playerStats.name}</td>
             <td>{playerStats.position}</td>
