@@ -10,8 +10,11 @@ import Row from 'react-bootstrap/Row';
 export type Game = { 
   homeTeam: Team 
   awayTeam: Team
-  id: string
+  id: string,
+  status: GameStatus
 }
+
+export type GameStatus = "scheduled" | "in-progress" | "final" | "postponed"
 
 export type Team = {
   name: string,
@@ -29,9 +32,7 @@ export type PlayerStats = {
 type Position = "PG" | "SG" | "SF" | "PF" | "C"
 
 export function BoxScore({ homeTeam, awayTeam, id }:  Game) {
-  const [isExpanded, toggleExpanded] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState<Team>(homeTeam)
-  const [activeFilterPosition, setActiveFilterPosition] = useState<Position | null>(null)
   const [stats, setStats] = useState<{ homeTeam: PlayerStats[], awayTeam: PlayerStats[] } | undefined>(undefined)
   
   useEffect(() => {
@@ -48,26 +49,27 @@ export function BoxScore({ homeTeam, awayTeam, id }:  Game) {
   const activeStats = stats && (selectedTeam.id == homeTeam.id ? stats.homeTeam : stats.awayTeam)
 
   return ( 
-    <Card bg="light" className="my-4 cursor-pointer">
-      <Card.Header className="cursor-pointer" onClick={() => toggleExpanded(!isExpanded)}>
-        <h4>{awayTeam.name} at {homeTeam.name}</h4>
-      </Card.Header>
-      {isExpanded &&
-          <Card.Body>
-            <div>
-              <Row className="my-2">
-                <Col>
-                  {teamButton(homeTeam)}
-                </Col>
-                <Col>
-                  {teamButton(awayTeam)}
-                </Col>
-              </Row>
-              {activeStats && boxScore(activeStats)}
-            </div>
-        </Card.Body>
-      }
-    </Card>
+    <div>{activeStats && boxScore(activeStats)}</div>
+    // <Card bg="light" className="my-4 cursor-pointer">
+    //   <Card.Header className="cursor-pointer" onClick={() => toggleExpanded(!isExpanded)}>
+    //     <h4>{awayTeam.name} at {homeTeam.name}</h4>
+    //   </Card.Header>
+    //   {isExpanded &&
+    //       <Card.Body>
+    //         <div>
+    //           <Row className="my-2">
+    //             <Col>
+    //               {teamButton(homeTeam)}
+    //             </Col>
+    //             <Col>
+    //               {teamButton(awayTeam)}
+    //             </Col>
+    //           </Row>
+    //           {activeStats && boxScore(activeStats)}
+    //         </div>
+    //     </Card.Body>
+    //   }
+    // </Card>
   )
 }
 

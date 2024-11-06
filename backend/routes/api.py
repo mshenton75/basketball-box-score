@@ -16,6 +16,7 @@ class Game(BaseModel):
   homeTeam: Team
   awayTeam: Team
   id: str
+  status: int
 
 @router.get("/games")
 def games() -> list[Game]:
@@ -28,7 +29,12 @@ def games() -> list[Game]:
       "name": f"{game['awayTeam']['teamCity']} {game['awayTeam']['teamName']}",
       "id": str(game["awayTeam"]["teamId"])
     }
-    return Game(homeTeam=home_team, awayTeam=away_team, id=str(game['gameId']))
+    return Game(
+      homeTeam=home_team, 
+      awayTeam=away_team, 
+      id=str(game['gameId']),
+      status=game['gameStatus']
+    )
 
   games = scoreboard.ScoreBoard().get_dict()['scoreboard']['games']
   return map(serialize_game, games)
