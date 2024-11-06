@@ -50,26 +50,6 @@ export function BoxScore({ homeTeam, awayTeam, id }:  Game) {
 
   return ( 
     <div>{activeStats && boxScore(activeStats)}</div>
-    // <Card bg="light" className="my-4 cursor-pointer">
-    //   <Card.Header className="cursor-pointer" onClick={() => toggleExpanded(!isExpanded)}>
-    //     <h4>{awayTeam.name} at {homeTeam.name}</h4>
-    //   </Card.Header>
-    //   {isExpanded &&
-    //       <Card.Body>
-    //         <div>
-    //           <Row className="my-2">
-    //             <Col>
-    //               {teamButton(homeTeam)}
-    //             </Col>
-    //             <Col>
-    //               {teamButton(awayTeam)}
-    //             </Col>
-    //           </Row>
-    //           {activeStats && boxScore(activeStats)}
-    //         </div>
-    //     </Card.Body>
-    //   }
-    // </Card>
   )
 }
 
