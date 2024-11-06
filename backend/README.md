@@ -1,8 +1,3 @@
-Install FastAPI
-```bash
-pip install "fastapi[standard]"
-```
-
 Install dependencies 
 ```bash
 pip install -r requirements.txt
