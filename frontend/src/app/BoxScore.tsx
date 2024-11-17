@@ -1,11 +1,7 @@
 import { useState, useEffect } from "react";
 import { getGame } from "./api";
-import Card from 'react-bootstrap/Card';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
-import Dropdown from 'react-bootstrap/Dropdown';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
 
 export type Game = { 
   homeTeam: Team 
@@ -23,13 +19,13 @@ export type Team = {
 
 export type PlayerStats = {
   name: string,
-  position: Position | null,
+  position: Position,
   points: number,
   rebounds: number, 
   assists: number,
 }
 
-type Position = "PG" | "SG" | "SF" | "PF" | "C"
+type Position = "PG" | "SG" | "SF" | "PF" | "C" | "BN"
 
 export function BoxScore({ homeTeam, awayTeam, id }:  Game) {
   const [selectedTeam, setSelectedTeam] = useState<Team>(homeTeam)

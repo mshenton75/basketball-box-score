@@ -56,7 +56,7 @@ def game(game_id) -> GameStats:
   def serialize_player(player):
     return Stats(
       name=player["name"],
-      position=player.get("position"),
+      position=player.get("position") or "BN",
       points=player["statistics"]["points"],
       rebounds=player["statistics"]["reboundsTotal"],
       assists=player["statistics"]["assists"]
